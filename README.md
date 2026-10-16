@@ -1,2 +1,2 @@
 # Calculadora-miniproyecto
-Act echa por Johan Armando Perez Dominguez 
+Act hecha por Johan Armando Perez Dominguez 
