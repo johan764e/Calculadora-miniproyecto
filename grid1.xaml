@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Grids2_JAPD.grid1"
+             Title="grid1">
+
+    <VerticalStackLayout Padding="0" Spacing="155">
+        <Entry Placeholder="1"></Entry>
+        <Grid Padding="20" RowSpacing="1" BackgroundColor="LightGray">
+        <!--Definimos 6 filas y 4 columnas-->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+
+            </Grid.RowDefinitions>
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            
+        </Grid.ColumnDefinitions>
+        
+        <!--Elementos en distintas posiciones-->
+        <!--Numeros-->
+        <Button Text="7"
+               BackgroundColor="Grey"
+               Grid.Row="1"
+               Grid.Column="0"
+               Margin="3"
+               WidthRequest="100"
+               HeightRequest="100"
+               Clicked="OnButtonClicked"
+                />
+
+            <Button Text="8"
+               BackgroundColor="Grey"
+               Grid.Row="1"
+               Grid.Column="1"
+               Margin="3"
+               WidthRequest="100"
+               HeightRequest="100"
+               Clicked="OnButtonClicked"
+                    />
+                
+            <Button Text="9"
+               BackgroundColor="Grey"
+               Grid.Row="1"
+               Grid.Column="1"
+               Margin="3"
+               WidthRequest="100"
+               HeightRequest="100"
+               Clicked="OnButtonClicked"
+                    />
+                
+            <Button Text="4"
+               BackgroundColor="Grey"
+               Grid.Row="1"
+               Grid.Column="1"
+               Margin="3"
+               WidthRequest="100"
+               HeightRequest="100"
+               Clicked="OnButtonClicked"
+                    />
+
+            <Button Text="5"
+               BackgroundColor="Grey"
+               Grid.Row="1"
+               Grid.Column="1"
+               Margin="3"
+               WidthRequest="100"
+               HeightRequest="100"
+               Clicked="OnButtonClicked"
+                    />
+
+            <Button Text="6"
+               BackgroundColor="Grey"
+               Grid.Row="1"
+               Grid.Column="1"
+               Margin="3"
+               WidthRequest="100"
+               HeightRequest="100"
+               Clicked="OnButtonClicked"
+                    />
+                
+            <Button Text="1"
+               BackgroundColor="Grey"
+               Grid.Row="1"
+               Grid.Column="1"
+               Margin="3"
+               WidthRequest="100"
+               HeightRequest="100"
+               Clicked="OnButtonClicked"
+                    />
+            <Button Text="2"
+               BackgroundColor="Grey"
+               Grid.Row="1"
+               Grid.Column="1"
+               Margin="3"
+               WidthRequest="100"
+               HeightRequest="100"
+               Clicked="OnButtonClicked"
+                    />
+
+            <Button Text="3"
+               BackgroundColor="Grey"
+               Grid.Row="1"
+               Grid.Column="1"
+               Margin="3"
+               WidthRequest="100"
+               HeightRequest="100"
+               Clicked="OnButtonClicked"
+                    />
+
+            <Button Text="0"
+               BackgroundColor="Grey"
+               Grid.Row="1"
+               Grid.Column="1"
+               Margin="3"
+               WidthRequest="100"
+               HeightRequest="100"
+               Clicked="OnButtonClicked"
+                    />
+
+            <Button Text="="
+               BackgroundColor="Grey"
+               Grid.Row="1"
+               Grid.Column="1"
+               Margin="3"
+               WidthRequest="100"
+               HeightRequest="100"
+               Clicked="OnButtonClicked"
+                    />
+            <!--Funciones Botones-->
+            <Button Text="+"
+               BackgroundColor="Grey"
+               Grid.Row="1"
+               Grid.Column="1"
+               Margin="3"
+               WidthRequest="100"
+               HeightRequest="100"
+               Clicked="OnButtonClicked"
+                    />
+                
+            <Button Text="-"
+               BackgroundColor="Grey"
+               Grid.Row="1"
+               Grid.Column="1"
+               Margin="3"
+               WidthRequest="100"
+               HeightRequest="100"
+               Clicked="OnButtonClicked"
+                    />
+
+            <Button Text="x"
+               BackgroundColor="Grey"
+               Grid.Row="1"
+               Grid.Column="1"
+               Margin="3"
+               WidthRequest="100"
+               HeightRequest="100"
+               Clicked="OnButtonClicked"
+                    />
+                
+            <Button Text="/"
+               BackgroundColor="Grey"
+               Grid.Row="1"
+               Grid.Column="1"
+               Margin="3"
+               WidthRequest="100"
+               HeightRequest="100"
+               Clicked="OnButtonClicked"
+                    />
+
+            <!--Botones para resultado-->
+            BackgroundColor="Grey"
+               Grid.Row="1"
+               Grid.Column="1"
+               Margin="3"
+               WidthRequest="100"
+               HeightRequest="100"
+               Clicked="OnButtonClicked"
+                    />
+
+            <Button Text="AC"
+               BackgroundColor="Grey"
+               Grid.Row="0"
+               Grid.Column="4"
+                Margin="3"
+                WidthRequest="100"
+               HeightRequest="100"/>
+            <Button Text="("
+               BackgroundColor="Grey"
+               Grid.Row="0"
+               Grid.Column="0"
+                Margin="3"
+                WidthRequest="100"
+               HeightRequest="100"/>
+            <Button Text=")"
+               BackgroundColor="Grey"
+               Grid.Row="0"
+               Grid.Column="1"
+                Margin="3"
+                WidthRequest="100"
+               HeightRequest="100"/>
+            <Button Text="%"
+               BackgroundColor="Grey"
+               Grid.Row="0"
+               Grid.Column="2"
+                Margin="3"
+                WidthRequest="100"
+               HeightRequest="100"/>
+
+            
+        </Grid>
+
+    </VerticalStackLayout>
+</ContentPage>
