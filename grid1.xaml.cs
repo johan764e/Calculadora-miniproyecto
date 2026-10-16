@@ -24,7 +24,7 @@ public partial class grid1 : ContentPage
 
         string texto = boton.Text;
 
-        // Limpiar toda la pantalla
+
         if (texto == "AC")
         {
             _currentInput = string.Empty;
@@ -33,7 +33,6 @@ public partial class grid1 : ContentPage
             return;
         }
 
-        // Borrar el ultimo caracter
         if (texto == "⌫")
         {
             _resultadoMostrado = false;
@@ -45,14 +44,13 @@ public partial class grid1 : ContentPage
             return;
         }
 
-        // Calcular resultado
         if (texto == "=")
         {
             CalcularResultado();
             return;
         }
 
-        // Validar punto decimal
+     
         if (texto == ".")
         {
             if (_resultadoMostrado)
@@ -81,7 +79,7 @@ public partial class grid1 : ContentPage
             return;
         }
 
-        // Porcentaje
+
         if (texto == "%")
         {
             if (_resultadoMostrado)
@@ -97,7 +95,6 @@ public partial class grid1 : ContentPage
             return;
         }
 
-        // Operadores basicos
         if (texto == "+" || texto == "-" ||
             texto == "x" || texto == "/")
         {
@@ -117,7 +114,6 @@ public partial class grid1 : ContentPage
 
             if (EsOperador(ultimo))
             {
-                // Evitar operadores consecutivos.
                 if (texto == "-" && ultimo != '-')
                 {
                     _currentInput += texto;
@@ -141,7 +137,7 @@ public partial class grid1 : ContentPage
             return;
         }
 
-        // Aceptar solamente numeros del teclado
+      
         if (texto.Length == 1 &&
             char.IsDigit(texto[0]))
         {
@@ -206,16 +202,16 @@ public partial class grid1 : ContentPage
                 throw new FormatException();
             }
 
-            // Preparar la expresion para DataTable
+          
             expresion = expresion.Replace("x", "*");
 
-            // Convertir porcentajes: 50% = (50/100)
+          
             expresion = Regex.Replace(
                 expresion,
                 @"(\d+(?:\.\d+)?)%",
                 "($1/100)");
 
-            // Solo permitir numeros y operadores autorizados
+           
             if (!Regex.IsMatch(
                 expresion,
                 @"^[0-9+\-*/().\s]+$"))
@@ -240,7 +236,7 @@ public partial class grid1 : ContentPage
                 resultado,
                 CultureInfo.InvariantCulture);
 
-            // Detectar division entre cero y resultados invalidos
+           
             if (double.IsNaN(numero) ||
                 double.IsInfinity(numero))
             {
