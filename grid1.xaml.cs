@@ -1,93 +1,264 @@
+
+using System;
+using System.Data;
+using System.Globalization;
+using System.Text.RegularExpressions;
+using Microsoft.Maui.Controls;
+
 namespace Grids2_JAPD;
 
 public partial class grid1 : ContentPage
 {
     private string _currentInput = string.Empty;
+    private bool _resultadoMostrado = false;
 
     public grid1()
     {
         InitializeComponent();
-        AsignarEventosBotones(this);
-    }
-
-
-    private void AsignarEventosBotones(object contenedor)
-    {
-        if (contenedor is Microsoft.Maui.Controls.Layout layout)
-        {
-            foreach (var hijo in layout.Children)
-            {
-                if (hijo is Button boton)
-                {
-                    boton.Clicked += OnButtonClicked;
-                }
-                else
-                {
-                    AsignarEventosBotones(hijo);
-                }
-            }
-        }
     }
 
     private void OnButtonClicked(object sender, EventArgs e)
     {
-        if (sender is Button boton)
-        {
-            string texto = boton.Text;
+        if (sender is not Button boton)
+            return;
 
-        
-            if (texto == "AC")
+        string texto = boton.Text;
+
+        // Limpiar toda la pantalla
+        if (texto == "AC")
+        {
+            _currentInput = string.Empty;
+            _resultadoMostrado = false;
+            ActualizarPantalla();
+            return;
+        }
+
+        // Borrar el ultimo caracter
+        if (texto == "⌫")
+        {
+            _resultadoMostrado = false;
+
+            if (_currentInput.Length > 0)
+                _currentInput = _currentInput[..^1];
+
+            ActualizarPantalla();
+            return;
+        }
+
+        // Calcular resultado
+        if (texto == "=")
+        {
+            CalcularResultado();
+            return;
+        }
+
+        // Validar punto decimal
+        if (texto == ".")
+        {
+            if (_resultadoMostrado)
             {
                 _currentInput = string.Empty;
+                _resultadoMostrado = false;
+            }
+
+            string numero = ObtenerNumeroActual();
+
+            if (numero.Contains("."))
+                return;
+
+            if (_currentInput.Length == 0 ||
+                EsOperador(_currentInput[^1]) ||
+                _currentInput[^1] == '%')
+            {
+                _currentInput += "0.";
+            }
+            else
+            {
+                _currentInput += ".";
+            }
+
+            ActualizarPantalla();
+            return;
+        }
+
+        // Porcentaje
+        if (texto == "%")
+        {
+            if (_resultadoMostrado)
+                return;
+
+            if (_currentInput.Length > 0 &&
+                char.IsDigit(_currentInput[^1]))
+            {
+                _currentInput += "%";
                 ActualizarPantalla();
             }
-        
-            else if (texto == "=")
+
+            return;
+        }
+
+        // Operadores basicos
+        if (texto == "+" || texto == "-" ||
+            texto == "x" || texto == "/")
+        {
+            if (_resultadoMostrado)
+                _resultadoMostrado = false;
+
+            if (_currentInput.Length == 0)
             {
-                CalcularResultado();
+                if (texto == "-")
+                    _currentInput = "-";
+
+                ActualizarPantalla();
+                return;
             }
-    
+
+            char ultimo = _currentInput[^1];
+
+            if (EsOperador(ultimo))
+            {
+                // Evitar operadores consecutivos.
+                if (texto == "-" && ultimo != '-')
+                {
+                    _currentInput += texto;
+                }
+                else
+                {
+                    _currentInput =
+                        _currentInput[..^1] + texto;
+                }
+            }
+            else if (ultimo == '.')
+            {
+                return;
+            }
             else
             {
                 _currentInput += texto;
-                ActualizarPantalla();
             }
+
+            ActualizarPantalla();
+            return;
         }
+
+        // Aceptar solamente numeros del teclado
+        if (texto.Length == 1 &&
+            char.IsDigit(texto[0]))
+        {
+            if (_resultadoMostrado)
+                _currentInput = string.Empty;
+
+            _resultadoMostrado = false;
+
+            if (_currentInput.Length > 0 &&
+                _currentInput[^1] == '%')
+            {
+                return;
+            }
+
+            _currentInput += texto;
+            ActualizarPantalla();
+        }
+    }
+
+    private bool EsOperador(char caracter)
+    {
+        return caracter == '+' ||
+               caracter == '-' ||
+               caracter == 'x' ||
+               caracter == '/';
+    }
+
+    private string ObtenerNumeroActual()
+    {
+        int inicio = _currentInput.Length;
+
+        while (inicio > 0)
+        {
+            char c = _currentInput[inicio - 1];
+
+            if (EsOperador(c) || c == '%')
+                break;
+
+            inicio--;
+        }
+
+        return _currentInput[inicio..];
     }
 
     private void ActualizarPantalla()
     {
-        
-        if (Content is VerticalStackLayout vsl && vsl.Children.Count > 0 && vsl.Children[0] is Entry entry)
-        {
-            entry.Text = _currentInput;
-        }
+        Display.Text = _currentInput;
     }
 
     private void CalcularResultado()
     {
+        if (string.IsNullOrWhiteSpace(_currentInput))
+            return;
+
         try
         {
-        
-            var dt = new System.Data.DataTable();
+            string expresion = _currentInput;
 
-           
-            string expresionFormateada = _currentInput.Replace("x", "*");
-
-            var resultado = dt.Compute(expresionFormateada, string.Empty);
-
-            if (resultado != null)
+            if (EsOperador(expresion[^1]) ||
+                expresion[^1] == '.')
             {
-                _currentInput = resultado.ToString();
-                ActualizarPantalla();
+                throw new FormatException();
             }
-        }
-        catch (Exception)
-        {
-            _currentInput = "Error";
+
+            // Preparar la expresion para DataTable
+            expresion = expresion.Replace("x", "*");
+
+            // Convertir porcentajes: 50% = (50/100)
+            expresion = Regex.Replace(
+                expresion,
+                @"(\d+(?:\.\d+)?)%",
+                "($1/100)");
+
+            // Solo permitir numeros y operadores autorizados
+            if (!Regex.IsMatch(
+                expresion,
+                @"^[0-9+\-*/().\s]+$"))
+            {
+                throw new FormatException();
+            }
+
+            using DataTable tabla = new DataTable();
+            tabla.Locale = CultureInfo.InvariantCulture;
+
+            object resultado = tabla.Compute(
+                expresion,
+                string.Empty);
+
+            if (resultado == null ||
+                resultado == DBNull.Value)
+            {
+                throw new ArithmeticException();
+            }
+
+            double numero = Convert.ToDouble(
+                resultado,
+                CultureInfo.InvariantCulture);
+
+            // Detectar division entre cero y resultados invalidos
+            if (double.IsNaN(numero) ||
+                double.IsInfinity(numero))
+            {
+                throw new DivideByZeroException();
+            }
+
+            _currentInput = numero.ToString(
+                "G15",
+                CultureInfo.InvariantCulture);
+
+            _resultadoMostrado = true;
             ActualizarPantalla();
-           
+        }
+        catch
+        {
+            Display.Text = "Error";
             _currentInput = string.Empty;
+            _resultadoMostrado = false;
         }
     }
 }
